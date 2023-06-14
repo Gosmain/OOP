@@ -7,7 +7,7 @@ class Man(object):
   food = 0
   
 
-  def eat():
+  def eat(self):
     if food >= 20:
       satieti += 50
       happiness += 20
@@ -15,6 +15,6 @@ class Man(object):
     else:
       print('Недостаточно еды! Сходите в магазин!')
 
-  def work():
+  def work(self):
     money += 100
     happines -= 40
