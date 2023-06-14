@@ -4,6 +4,7 @@ class Man(object):
   money = 0
   satiety = 0
   happiness = 0
+  food = 0
 
   def eat():
     if food >= 20:
