@@ -12,7 +12,7 @@ class Man(object):
 
   def eat(self):
     global food
-    if food < 20:
+    if food <= 20:
       self.go_to_the_store()
     else:
       self.satieti = min(100, self.satieti+50)
