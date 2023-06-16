@@ -1,10 +1,7 @@
 import random
 
 class Man(object):
-
-  global food
-  food = 20
-
+  
   def __init__(self, name, age, satieti, money, happiness):
     self.name = name
     self.age = age
@@ -47,9 +44,7 @@ class Man(object):
   def go_to_the_store(self):
     global food
     if self.money < 50:
-      self.go_to_work()
-    elif self.satieti <= 20:
-      self.eat()
+      self.go_to_work()    
     elif self.happiness <= 20:
       self.play_computer_games()
     else:
@@ -81,17 +76,16 @@ class Man(object):
   
     
 if __name__ == "__main__":
-  character = Man('Никитосов', 25, 40, 100, 40)
-  for i in range(1,5):
+  character = Man('Товарищ', 25, 100, 100, 100)
+  food = 0
+  for i in range(1,367):
       if character.happiness > 0 and character.satieti > 0:
         print(f'''День {i}
 {character.name} - {character.age+i//365}
 Счастье - {character.happiness}
 Сытость - {character.satieti}
 Деньги - {character.money}
-Еда - {food}
-''')
-    
+''')    
         character.action(random.randint(1,5))
         print()
       else:
