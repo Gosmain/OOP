@@ -2,40 +2,58 @@ import random
 
 class Man(object):
 
-  def __init__(self, name, age, satieti, money, happiness, food):
+  global food
+  food = 20
+
+  def __init__(self, name, age, satieti, money, happiness):
     self.name = name
     self.age = age
     self.satieti = satieti
     self.money = money
     self.happiness = happiness
-    self.food = food     
+    
 
   def eat(self):
-    if self.food < 20:
+    global food
+    if food < 20:
       self.go_to_the_store()
     else:
       self.satieti = min(100, self.satieti+50)
       self.happiness = min(100, self.happiness+20)
-      self.food -= 20
+      food -= 20
     
 
   def sleep(self):
-    self.happiness = min(100, self.happiness+50)
-    self.satieti -= 20
+    if self.satieti <= 20:
+      self.eat()
+    else:
+      self.happiness = min(100, self.happiness+50)
+      self.satieti -= 20
 
   def go_to_work(self):
-    self.money += 100
-    self.happiness -= 40
+    if self.happiness <= 40:
+      self.play_computer_games()
+    else:
+      self.money += 100
+      self.happiness -= 40
 
   def play_computer_games(self):
-    self.happiness = min(100, self.happiness+60)
-    self.satieti -= 20
+    if self.satieti <= 20:
+      self.eat()
+    else:
+      self.happiness = min(100, self.happiness+60)
+      self.satieti -= 20
 
   def go_to_the_store(self):
+    global food
     if self.money < 50:
       self.go_to_work()
+    elif self.satieti <= 20:
+      self.eat()
+    elif self.happiness <= 20:
+      self.play_computer_games()
     else:
-      self.food += 50
+      food += 50
       self.satieti -= 20
       self.happiness -= 20
       self.money -= 50
@@ -52,36 +70,34 @@ class Man(object):
 
   def couse_of_dead(self):
     if self.satieti <= 0 and self.happiness <= 0:
-      return 'от грусти и от голода'
+      return 'от грусти и от голода. R.I.P.'
     elif self.satieti <= 0:
-      return 'от голода'
+      return 'от голода. R.I.P.'
     else:
-      return 'от грусти'
+      return 'от грусти. R.I.P.'  
     
     
 
   
     
 if __name__ == "__main__":
-  character = Man('Никитосов', 26, 100, 100, 100, 100)
-  day_count = 1
-  
-  while character.happiness>0 and character.satieti>0:
-    print(f'''День {day_count}
-{character.name} - {character.age+day_count//365}
+  character = Man('Никитосов', 25, 40, 100, 40)
+  for i in range(1,5):
+      if character.happiness > 0 and character.satieti > 0:
+        print(f'''День {i}
+{character.name} - {character.age+i//365}
 Счастье - {character.happiness}
 Сытость - {character.satieti}
 Деньги - {character.money}
-Еда - {character.food}
+Еда - {food}
 ''')
     
-    character.action(random.randint(1,5))
-    print()
-    day_count += 1
-  else:
-    print(f'''День {day_count}
+        character.action(random.randint(1,5))
+        print()
+      else:
+        print(f'''День {i}
 {character.name} умер {character.couse_of_dead()}''')
-
+        break
     
     
     
