@@ -1,0 +1,1 @@
+START_FOOD = 0
