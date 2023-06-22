@@ -2,22 +2,19 @@ from models.man import Man
 from models.home import Home
 
 if __name__ == "__main__":
-<<<<<<< HEAD
   
   char = Man('Никитосов', 25)
-  for i in range(1, 731):
-    if char.is_alive():
-      print(f'День {i}')
-      char.live_circle(i)
-      print(char)
-    else:
-      print(f'День {i}')
-      print(char)
+  char.home = Home(char.name)
+  for i in range(365, 370):
+    print(f'День {i}\n{char}')
+    if not char.is_alive():
       break
+    char.live_circle(i)
+
+
+      
   
 
-=======
-  character = Man('Никитосов', 25, 100, 100, 100, 100)
-  character.live_circle()
-  print('hello')
->>>>>>> main
+
+  
+  

@@ -1,1 +1,0 @@
-START_TODAY = 1

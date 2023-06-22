@@ -1,8 +1,8 @@
-from constant import day_constant
+from configs import day_config
 
 class Day(object):
 
-  def __init__(self, today=START_TODAY):
+  def __init__(self, today=day_config.START_DAY):
     self.today = today
 
   def next_day(self):
