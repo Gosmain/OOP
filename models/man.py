@@ -14,10 +14,7 @@ class Man(object):
     self.happiness = happines
     
   def is_alive(self):
-    if self.happiness and self.satieti:
-      return True
-    else:
-      return False
+    return self.satieti and self.happiness
 
   
   def eat(self):
@@ -28,23 +25,23 @@ class Man(object):
   
   def sleep(self):
     self.happiness = min(man_config.MAX_HAPPINES, self.happiness + man_config.HAPPINES_STEP_SLEEP)
-    self.satieti -= man_config.SATIETI_STEP_SLEEP
+    self.satieti = max(man_config.MIN_SATIETI, self.satieti - man_config.SATIETI_STEP_SLEEP)
 
   
   def go_to_work(self):
     self.money += man_config.MONEY_STEP_WORK
-    self.happiness -= man_config.HAPPINES_STEP_WORK
+    self.happiness = max(man_config.MIN_HAPPINES, self.happiness - man_config.HAPPINES_STEP_WORK)
 
   
   def play_computer_games(self):
     self.happiness = min(man_config.MAX_HAPPINES, self.happiness + man_config.HAPPINES_STEP_PLAY)
-    self.satieti -= man_config.SATIETI_STEP_PLAY
+    self.satieti = max(man_config.MIN_SATIETI, self.satieti - man_config.SATIETI_STEP_PLAY)
 
   
   def go_to_the_store(self):
     self.home.fridge.food += man_config.FOOD_STEP_STORE
-    self.satieti -= man_config.SATIETI_STEP_STORE
-    self.happiness -= man_config.HAPPINES_STEP_STORE
+    self.satieti = max(man_config.MIN_SATIETI, self.satieti - man_config.SATIETI_STEP_STORE)
+    self.happiness = max(man_config.MIN_HAPPINES, self.satieti - man_config.HAPPINES_STEP_STORE)
     self.money -= man_config.MONEY_STEP_STORE
 
   
