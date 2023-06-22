@@ -2,6 +2,7 @@ from models.man import Man
 from models.home import Home
 
 if __name__ == "__main__":
+<<<<<<< HEAD
   
   char = Man('Никитосов', 25)
   for i in range(1, 731):
@@ -15,3 +16,8 @@ if __name__ == "__main__":
       break
   
 
+=======
+  character = Man('Никитосов', 25, 100, 100, 100, 100)
+  character.live_circle()
+  print('hello')
+>>>>>>> main
