@@ -1,5 +1,5 @@
-START_SATIETI = 100
-START_HAPPINES = 100
+START_SATIETI = 60
+START_HAPPINES = 60
 START_MONEY = 50
 MAX_HAPPINES = 100
 MAX_SATIETI = 100
@@ -28,3 +28,4 @@ LIVE_MIN_MAN_FOOD = 40
 LIVE_MIN_CAT_FOOD = 40
 HAPPINES_STEP_GROW_UP = 50
 GROW_STEP = 1
+CAT_NAMES = ('Васька', 'Мурзик', 'Кузя', 'Тишка', 'Бегемот', 'Буцефал', 'Фреди', 'Дымок')
