@@ -1,5 +1,6 @@
 from configs import day_config
 
+
 class Day(object):
 
   def __init__(self, today=day_config.START_DAY):
@@ -7,4 +8,3 @@ class Day(object):
 
   def next_day(self):
     self.today += 1
-    
