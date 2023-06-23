@@ -1,7 +1,9 @@
 import random
+
 from configs import man_config
 from models.home import Home
 from models.fridge import Fridge
+from models.cat import Cat
 
 
 class Man(object):
@@ -17,16 +19,24 @@ class Man(object):
     self.satieti = satieti
     self.money = money
     self.happiness = happines
+    self.cat = ''
+    self.l_of_cat = []
+
+  def __str__(self):
+    if self.is_alive():
+      return f'{self.name} - {self.age}\nСчастье - {self.happiness}\nСытость - {self.satieti}\nДеньги - {self.money}\n'
+    else:
+      return f'{self.name} умер {self.couse_of_dead()}'
 
   def is_alive(self):
-    return min(self.satieti, self.happiness)
+    return self.satieti and self.happiness
 
   def eat(self):
     self.satieti = min(man_config.MAX_SATIETI,
                        self.satieti + man_config.SATIETI_STEP_EAT)
     self.happiness = min(man_config.MAX_HAPPINES,
                          self.happiness + man_config.HAPPINES_STEP_EAT)
-    self.home.fridge.food -= man_config.FOOD_STEP_EAT
+    self.home.fridge.man_food -= man_config.FOOD_STEP_EAT
 
   def sleep(self):
     self.happiness = min(man_config.MAX_HAPPINES,
@@ -46,7 +56,8 @@ class Man(object):
                        self.satieti - man_config.SATIETI_STEP_PLAY)
 
   def go_to_the_store(self):
-    self.home.fridge.food += man_config.FOOD_STEP_STORE
+    self.home.fridge.cat_food += man_config.CAT_FOOD_STEP_STORE
+    self.home.fridge.man_food += man_config.MAN_FOOD_STEP_STORE
     self.satieti = max(man_config.MIN_SATIETI,
                        self.satieti - man_config.SATIETI_STEP_STORE)
     self.happiness = max(man_config.MIN_HAPPINES,
@@ -59,7 +70,8 @@ class Man(object):
       2: self.sleep,
       3: self.go_to_work,
       4: self.play_computer_games,
-      5: self.go_to_the_store
+      5: self.go_to_the_store,
+      6: self.buy_cat
     }
     return action_dict[selected_action]()
 
@@ -71,11 +83,27 @@ class Man(object):
     else:
       return 'от грусти. R.I.P.'
 
+  def lived_day(self, day):
+    if day % 365 == 0:
+      self.age += man_config.GROW_STEP
+      self.happiness = min(man_config.MAX_HAPPINES,
+                           self.happiness + man_config.HAPPINES_STEP_GROW_UP)
+
+  def buy_cat(self):
+    self.cat = Cat(random.randint(1, 3), self,
+                   random.choice(man_config.CAT_NAMES))
+    self.home.fridge.cat_food += man_config.CAT_FOOD_STEP_STORE
+    self.l_of_cat.append(self.cat)
+
+  def feed_cat(self):
+    self.home.cat_food += 20
+    self.home.fridge.cat_food -= 20
+
   def live(self):
     if self.happiness <= man_config.LIVE_MIN_HAPPINES:
       self.play_computer_games()
     elif self.satieti <= man_config.LIVE_MIN_SATIETI:
-      if self.home.fridge.food >= man_config.LIVE_EAT_FOOD:
+      if self.home.fridge.man_food >= man_config.LIVE_EAT_FOOD:
         self.eat()
       else:
         if self.money >= man_config.LIVE_EAT_MONEY:
@@ -84,24 +112,20 @@ class Man(object):
           self.go_to_work()
     elif self.money <= man_config.LIVE_MIN_MONEY:
       self.go_to_work()
-    elif self.home.fridge.food <= man_config.LIVE_MIN_FOOD:
+    elif min(self.home.fridge.man_food, self.home.fridge.cat_food) <= min(
+        man_config.LIVE_MIN_MAN_FOOD, man_config.LIVE_MIN_CAT_FOOD):
       self.go_to_the_store()
+    elif self.home.cat_food < 20:
+      if self.home.fridge.cat_food < 20:
+        self.go_to_work
+      else:
+        self.go_to_the_store
+    elif len(self.l_of_cat) < 1:
+      self.buy_cat
     else:
-      self.action(random.randint(1, 5))
-
-  def grow_up(self, day):
-    if day % 365 == 0:
-      self.age += man_config.GROW_STEP
-      self.happiness = min(man_config.MAX_HAPPINES,
-                           self.happiness + man_config.HAPPINES_STEP_GROW_UP)
+      self.action(random.randint(1, 6))
 
   def live_circle(self, day):
     if self.is_alive():
-      self.grow_up(day)
+      self.lived_day(day)
       self.live()
-
-  def __str__(self):
-    if self.is_alive():
-      return f'{self.name} - {self.age}\nСчастье - {self.happiness}\nСытость - {self.satieti}\nДеньги - {self.money}\n'
-    else:
-      return f'{self.name} умер {self.couse_of_dead()}'

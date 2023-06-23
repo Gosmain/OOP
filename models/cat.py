@@ -6,15 +6,20 @@ class Cat(object):
 
   def __init__(self,
                age,
-               breed,
                owner='Unknown',
                name='Unknown',
                satieti=cat_config.START_SATIETI):
     self.name = name
     self.age = age
-    self.breed = breed
     self.owner = owner
     self.satieti = satieti
+
+  def __str__(self):
+    if self.is_alive():
+      return f'{self.name}. Сытость - {self.satieti}'
+    else:
+      self.owner.cat = ''
+      return f'{self.name} умер от голода'
 
   def is_alive(self):
     return self.satieti
@@ -22,6 +27,7 @@ class Cat(object):
   def eat(self):
     self.satieti = min(cat_config.MAX_SATIETI,
                        self.satieti + cat_config.EAT_SATIETI_STEP)
+    self.owner.home.cat_food -= 20
 
   def sleep(self):
     self.satieti = max(cat_config.MIN_SATIETI,
@@ -36,12 +42,6 @@ class Cat(object):
       cat_config.MIN_SATIETI,
       self.satieti - cat_config.LOOK_OUT_THE_WINDOW_SATIETI_STEP)
 
-  def __str__(self):
-    if self.is_alive():
-      return f'{self.name} - {self.age}\nСытость - {self.satieti}'
-    else:
-      return f'{self.name} умер от голода'
-
   def action(self, selected_action):
     action_dict = {
       1: self.eat,
@@ -51,8 +51,17 @@ class Cat(object):
     }
     return action_dict[selected_action]()
 
-  def live_circle(self):
+  def live(self):
     if self.satieti <= cat_config.LIVE_MIN_SATIETI:
       self.eat()
     else:
       self.action(random.randint(1, 4))
+
+  def lived_day(self, day):
+    if day % 365 == 0:
+      self.age += cat_config.GROW_STEP
+
+  def live_circle(self, day):
+    if self.is_alive():
+      self.live()
+      self.lived_day(day)

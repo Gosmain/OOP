@@ -1,0 +1,1 @@
+START_CAT_FOOD = 40
