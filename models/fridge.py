@@ -8,3 +8,6 @@ class Fridge(object):
                cat_food=fridge_config.START_CAT_FOOD):
     self.man_food = man_food
     self.cat_food = cat_food
+
+  def __str__(self):
+    return f'Еда - {self.man_food}\nКошачья еда - {self.cat_food}'

@@ -5,18 +5,18 @@ from configs import cat_config
 class Cat(object):
 
   def __init__(self,
-               age,
-               owner='Unknown',
-               name='Unknown',
+               owner,
+               name,
+               breed='Unknown',
                satieti=cat_config.START_SATIETI):
     self.name = name
-    self.age = age
     self.owner = owner
     self.satieti = satieti
+    self.breed = breed
 
   def __str__(self):
     if self.is_alive():
-      return f'{self.name}. Сытость - {self.satieti}'
+      return f'{self.name}. Сытость - {self.satieti}. Порода - {self.breed}.'
     else:
       self.owner.cat = ''
       return f'{self.name} умер от голода'
@@ -25,9 +25,13 @@ class Cat(object):
     return self.satieti
 
   def eat(self):
-    self.satieti = min(cat_config.MAX_SATIETI,
+    if self.owner.home.cat_food >= 20:
+      self.owner.home.cat_food -= 20
+      self.satieti = min(cat_config.MAX_SATIETI,
                        self.satieti + cat_config.EAT_SATIETI_STEP)
-    self.owner.home.cat_food -= 20
+    else:
+      self.satieti = max(cat_config.MIN_SATIETI,
+                       self.satieti - cat_config.STEP_HUNGER)
 
   def sleep(self):
     self.satieti = max(cat_config.MIN_SATIETI,
@@ -57,11 +61,11 @@ class Cat(object):
     else:
       self.action(random.randint(1, 4))
 
-  def lived_day(self, day):
-    if day % 365 == 0:
-      self.age += cat_config.GROW_STEP
+  # def lived_day(self, day):
+  #   if day % 365 == 0:
+  #     self.age += cat_config.GROW_STEP
 
-  def live_circle(self, day):
+  def live_circle(self):
     if self.is_alive():
       self.live()
-      self.lived_day(day)
+      
