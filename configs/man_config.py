@@ -34,9 +34,20 @@ LIVE_EAT_MONEY = 50
 LIVE_MIN_MONEY = 50
 LIVE_MIN_MAN_FOOD = 40
 LIVE_MIN_CAT_FOOD = 40
+LIVE_MIN_HOME_CAT_FOOD = 20
 
 HAPPINES_STEP_GROW_UP = 50
 GROW_STEP = 1
 
-CAT_NAMES = ['Васька', 'Мурзик', 'Кузя', 'Тишка', 'Бегемот', 'Буцефал', 'Фреди', 'Дымок']
-HAPPINES_FEED_CAT = 20
+CAT_NAMES = [
+  'Васька', 'Мурзик', 'Кузя', 'Тишка', 'Бегемот', 'Буцефал', 'Фреди', 'Дымок'
+]
+
+HAPPINES_STEP_BURY_CAT = 40
+
+HAPPINES_STEP_FEED_CAT = 20
+SATIETI_STEP_FEED_CAT = 20
+FOOD_STEP_FEED_CAT = 20
+
+CAT_COST = 400
+MONEY_FOR_BUY_CAT = 500
