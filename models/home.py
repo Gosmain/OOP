@@ -6,13 +6,13 @@ from models.man import Man
 class Home(object):
 
   def __init__(self, owner=None):
-    self.owner = owner
+    self.owner = None
     self.fridge = Fridge()
     self.cat_food = home_config.START_CAT_FOOD
     self.tenants = {'люди': [], 'коты': []}
 
   def add_tenant(self, who):
-    if who.__class__ == type(Man):
+    if isinstance(who, Man):
       self.tenants['люди'].append(who)
       who.home = self
     else:
@@ -20,7 +20,7 @@ class Home(object):
       who.home = self
 
   def remove_tenant(self, who):
-    if who.__class__ == type(Man):
+    if isinstance(who, Man):
       self.tenants['люди'].remove(who)
       who.home = None
     else:

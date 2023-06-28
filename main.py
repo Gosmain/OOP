@@ -3,21 +3,24 @@ from models.home import Home
 
 if __name__ == "__main__":
 
-  char = Man('Никитосов', 33)
-  hm = Home()
-  char.move_to_a_new_house(hm)
+  character = Man('Никитосов', 30)
+  character_home = Home()
+  character.move_to_new_house(character_home)
+
   for i in range(1, 366):
-    char.live_circle(i)
-    print(f'День {i}\n')
-    print(char)
-    if char.cat != '':
-      for el in char.list_of_alive_cats():
-        el.live_circle()
-        print(f'{el}\n')
-    if not char.is_alive():
+
+    character.live_circle(i)
+
+    for cat in character.remember_living_cats():
+      print(cat)
+      cat.live_circle()
+
+    print(f'День {i}\n{character}')
+
+    if not character.is_alive():
       break
+
   print(
-    f'Год закончен, котиков у человека: {len(char.list_of_alive_cats())+len(char.list_of_dead_cats())}'
+    f'Год закончен, котиков у человека: {len(character.remember_living_cats())+len(character.remember_dead_cats())}'
   )
 
- 
