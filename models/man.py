@@ -122,7 +122,8 @@ class Man(object):
         item = self.remember_living_cats().pop(
           self.remember_living_cats().index(cat))
         self.remember_dead_cats().append(item)
-        self.happiness -= man_config.HAPPINES_STEP_BURY_CAT
+        self.happiness = max(man_config.MIN_HAPPINES,
+                         self.happiness - man_config.HAPPINES_STEP_BURY_CAT)
         self.home.tenants['коты'].remove(cat)
   
   def fill_cat_bowl(self):

@@ -7,7 +7,7 @@ if __name__ == "__main__":
   character_home = Home()
   character.move_to_new_house(character_home)
 
-  for i in range(1, 366):
+  for i in range(1, 4000):
 
     character.live_circle(i)
 
