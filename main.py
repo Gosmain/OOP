@@ -21,6 +21,5 @@ if __name__ == "__main__":
       break
 
   print(
-    f'Год закончен, котиков у человека: {len(character.remember_living_cats())+len(character.remember_dead_cats())}'
+    f'Год закончен, котиков у человека: {len(character.remember_living_cats())}.\nКотиков умерло: {len(character.remember_dead_cats())}.'
   )
-
