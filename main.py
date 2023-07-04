@@ -7,7 +7,7 @@ if __name__ == "__main__":
 
   character = Man(Faker('ru_RU').first_name_male(), 30)
   women = Wife(Faker('ru_RU').first_name_female(), 29)
-  character_home = Home()
+  character_home = Home() # TODO после инициализации добавь пустую строку
   character.move_to_new_house(character_home)
   character + women
 
@@ -17,7 +17,7 @@ if __name__ == "__main__":
     women.live_circle(i)
 
     for cat in character.remember_living_cats():
-      print(cat)
+      print(cat) # TODO в теоретической теории, если у тебя кот сразу будет, то ты инфу о нем выведешь раньше, чем номер дня
       cat.live_circle()
 
     print(f'День {i}\n{character}\n{women}')
@@ -31,3 +31,7 @@ if __name__ == "__main__":
   print(
     f'Год закончен, котиков у человека: {len(character.remember_living_cats())}.\nКотиков умерло: {len(character.remember_dead_cats())}.'
   )
+    # TODO сократи строку, не умещается в 80 символов, не вырезай ничего, просто вторую половину перенеси на новую строку (туду после исправления можно удалить)
+    # TODO так же давай добавим в итоговую стату инфу по человечкам, сколько денег фарманули , что по счастью и тд
+
+    # В остальном все хорошо, осталась финишная прямая и можно заканчивать)

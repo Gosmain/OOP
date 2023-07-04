@@ -9,3 +9,4 @@ class Fridge(object):
 
   def __str__(self):
     return f'Еда - {self.man_food.value}\nКошачья еда - {self.cat_food.value}'
+

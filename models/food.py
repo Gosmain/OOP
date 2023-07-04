@@ -12,9 +12,11 @@ class Food(object):
     return f'Количество еды {self.value}.'
 
   def spoil(self):
-    if random.randint(1, 10) <= food_config.SPOIL_FOOD_CHANCE:
+    if random.randint(1, 10) <= food_config.SPOIL_FOOD_CHANCE: # TODO опять же, вынеси рандомайзер из метода
       self.value = max(food_config.MIN_FOOD_VALUE,
                        self.value - food_config.SPOIL_FOOD_STEP)
+
+          # TODO закинь сюда принт, что еда испортилась
 
 
 class ManFood(Food):

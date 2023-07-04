@@ -15,11 +15,12 @@ class Man:
     self.money = man_config.START_MONEY
     self.happiness = man_config.START_HAPPINES
     self.cat = None
-    self.spouse = None
+    self.spouse = None # TODO Сгруппировать свойства как у котов
 
   def __str__(self):
     if self.is_alive():
       return f'{self.name} - {self.age}\nСчастье - {self.happiness}\nСытость - {self.satieti}\nДеньги - {self.money}\n{self.home.fridge}\nЕда в кормушке - {self.home.cat_food}\n'
+        # TODO разбей строку на несколько, не умещается в 120 символов
     else:
       return f'{self.name} умер {self.couse_of_dead()}'
 
@@ -144,7 +145,7 @@ class Man:
       self.remember_living_cats())
     self.home.fridge.cat_food.value -= man_config.FOOD_STEP_FEED_CAT * len(
       self.remember_living_cats())
-    print(f'{self.name} наполнил кошачью миску.\n')
+    print(f'{self.name} наполнил кошачью миску.\n') # TODO отдели принты от логики пустой строкой
 
   def move_to_new_house(self, house):
     self.home = house
@@ -226,10 +227,10 @@ class Wife(Man):
       4: self.go_to_store
     }
     return action_dict[selected_action]()
-    
+
 
   def live(self):
-    
+
     if self.happiness <= man_config.LIVE_MIN_HAPPINES:
       self.play_computer_games()
 
@@ -240,7 +241,7 @@ class Wife(Man):
           self.go_to_store()
 
     elif len(self.remember_living_cats()) > 0 and self.home.fridge.cat_food.value >= 20 * len(self.remember_living_cats()) and self.home.cat_food < man_config.LIVE_MIN_HOME_CAT_FOOD*len(self.remember_living_cats()):
-      self.fill_cat_bowl()      
+      self.fill_cat_bowl()
 
     elif self.money >= man_config.MONEY_FOR_BUY_CAT:
       self.buy_cat(self.choose_cat_name())
@@ -250,5 +251,8 @@ class Wife(Man):
 
     self.bury_cat()
 
-    
-    
+
+
+# TODO у тебя жена наследется от человека, она не должна ходить на работу, но по факту такой метод у нее будет
+# TODO суть задачи была в том, чтобы отделить общую логику в класс человек, а уже для мужа и жены реализовать нужные им методы и свойства
+# По факту, конечно ты переопределил метод лайв для жены и набор действий, но если посмотришь через __dict__ все что есть у человека будет и у нее
