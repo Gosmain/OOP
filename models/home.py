@@ -3,7 +3,7 @@ from configs import home_config
 from models.man import Man
 
 
-class Home(object):
+class Home:
 
   def __init__(self, owner=None):
     self.owner = None
@@ -28,5 +28,4 @@ class Home(object):
       who.home = None
 
   def change_owner(self, new_owner):
-    self.owner.home = None
-    new_owner.home = self
+    self.owner = new_owner

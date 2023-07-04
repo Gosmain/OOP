@@ -2,13 +2,13 @@ import random
 from configs import cat_config
 
 
-class Cat(object):
+class Cat:
 
   def __init__(self, name):
     self.name = name
     self.owner = None
     self.satieti = cat_config.START_SATIETI
-    self.breed = 'Unknown'
+    self.breed = None
     self.home = None
 
   def __str__(self):
@@ -19,7 +19,7 @@ class Cat(object):
       return f'{self.name} умер от голода.\n'
 
   def is_alive(self):
-    return bool(self.satieti)
+    return self.satieti > 0
 
   def set_home(self):
     self.home = self.owner.home
@@ -37,7 +37,7 @@ class Cat(object):
 
   def steal_food(self):
     if random.randint(1, 10) <= cat_config.STEAL_CHANCE:
-      self.owner.home.fridge.man_food -= cat_config.STEAL_FOOD_STEP_FOOD
+      self.owner.home.fridge.man_food.value -= cat_config.STEAL_FOOD_STEP_FOOD
       self.satieti += min(cat_config.MAX_SATIETI,
                           self.satieti + cat_config.STEAL_FOOD_STEP_SATIETI)
       print(f'{self.name} стащил еду.')
