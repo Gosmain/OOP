@@ -28,6 +28,7 @@ class Man:
     self.spouse = other
     other.spouse = self
     self.up_top_overall(other.money)
+    
 
   def is_alive(self):
     return self.satieti > 0 and self.happiness > 0
@@ -51,7 +52,9 @@ class Man:
     print(f'{self.name} поспал.\n')
 
   def go_to_work(self):
-    self.up_top_overall(man_config.MONEY_STEP_WORK)
+    self.money += man_config.MONEY_STEP_WORK
+    if self.is_married():
+      self.spouse.money = self.money
     self.happiness = max(man_config.MIN_HAPPINES,
                          self.happiness - man_config.HAPPINES_STEP_WORK)
     print(f'{self.name} сходил на работу.\n')
@@ -71,8 +74,10 @@ class Man:
                        self.satieti - man_config.SATIETI_STEP_STORE)
     self.happiness = max(man_config.MIN_HAPPINES,
                          self.happiness - man_config.HAPPINES_STEP_STORE)
-    self.down_top_overall(man_config.MAN_FOOD_COST + man_config.CAT_FOOD_COST * len(
-      self.remember_living_cats()))
+    self.money -= man_config.MAN_FOOD_COST + man_config.CAT_FOOD_COST * len(
+      self.remember_living_cats())
+    if self.is_married():
+      self.spouse.money = self.money
     print(f'{self.name} сходил в магазин.\n')
 
   def action(self, selected_action):
@@ -93,11 +98,11 @@ class Man:
     else:
       return 'от грусти. R.I.P.'
 
-  def lived_day(self, day):
-    if day % 365 == 0:
-      self.age += man_config.GROW_STEP
-      self.happiness = min(man_config.MAX_HAPPINES,
-                           self.happiness + man_config.HAPPINES_STEP_GROW_UP)
+  # def lived_day(self, day):
+  #   if day % 365 == 0:
+  #     self.age += man_config.GROW_STEP
+  #     self.happiness = min(man_config.MAX_HAPPINES,
+  #                          self.happiness + man_config.HAPPINES_STEP_GROW_UP)
 
   def choose_cat_name(self):
     return Faker('ru_RU').first_name()
@@ -110,7 +115,9 @@ class Man:
     self.remember_living_cats().append(self.cat)
     self.happiness = min(man_config.MAX_HAPPINES,
                          self.happiness + man_config.HAPPINES_STEP_BUY_CAT)
-    self.down_top_overall(man_config.CAT_COST)
+    self.money -= man_config.CAT_COST
+    if self.is_married():
+      self.spouse.money = self.money
     print(f'{self.name} купил кота.')
 
   def take_cat(self, cat):
@@ -207,9 +214,9 @@ class Man:
     self.money -= how_many
     self.spouse.money -= how_many
 
-  def live_circle(self, day):
+  def live_circle(self):
     if self.is_alive():
-      self.lived_day(day)
+      # self.lived_day(day)
       self.live()
 
 

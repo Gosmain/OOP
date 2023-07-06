@@ -6,6 +6,7 @@ class Cat:
 
   def __init__(self, name):
     self.name = name
+    self.age = 0
     self.owner = None
     self.satieti = cat_config.START_SATIETI
     self.breed = None
@@ -89,13 +90,14 @@ class Cat:
   def live_circle(self):
     if self.is_alive():
       self.live()
+      
 
 
 class RussianBlueCat(Cat):
 
   def __init__(
-    self,
-    name,
+          self,
+          name,
   ):
     super().__init__(name)
     self.breed = 'русская голубая'
@@ -104,8 +106,8 @@ class RussianBlueCat(Cat):
 class ScotishCat(Cat):
 
   def __init__(
-    self,
-    name,
+          self,
+          name,
   ):
     super().__init__(name)
     self.breed = 'шотландская'
@@ -114,8 +116,8 @@ class ScotishCat(Cat):
 class SphinxCat(Cat):
 
   def __init__(
-    self,
-    name,
+          self,
+          name,
   ):
     super().__init__(name)
     self.breed = 'сфинкс'

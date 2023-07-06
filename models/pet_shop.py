@@ -9,4 +9,4 @@ class PetShop:
 
   @classmethod
   def sell(cls):
-    return cls.animals_dict[random.randint(1, 3)]
+    return cls.animals_dict[random.randint(1, len(cls.animals_dict))]
