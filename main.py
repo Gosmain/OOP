@@ -10,7 +10,7 @@ if __name__ == "__main__":
   women = Wife(Faker('ru_RU').first_name_female(), 29)
   character_home = Home()
   character.move_to_new_house(character_home)
-  character + women
+  character.wedding(women)
   time = Time(0)
   time.add_observer(character)
   time.add_observer(women)
@@ -21,11 +21,14 @@ if __name__ == "__main__":
 
     if not (character.is_alive() and women.is_alive()):
       break
+      
     else:
       time.change_time(1)
+      
       print(f'\nДень {time.time//24}\n')
       for liver in time.observers:
         print(f'{liver}\n')
+        
       character.home.fridge.man_food.spoil()
       character.home.fridge.cat_food.spoil()    
 

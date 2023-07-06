@@ -33,6 +33,9 @@ class Man:
   def is_alive(self):
     return self.satieti > 0 and self.happiness > 0
 
+  def wedding(self, who):
+    self + who
+
   def is_married(self):
     return self.spouse != None
 
