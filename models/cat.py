@@ -43,7 +43,7 @@ class Cat:
   def steal_food(self):
     if self.steal_chance():
       self.owner.home.fridge.man_food.value -= cat_config.STEAL_FOOD_STEP_FOOD
-      self.satieti += min(cat_config.MAX_SATIETI,
+      self.satieti = min(cat_config.MAX_SATIETI,
                           self.satieti + cat_config.STEAL_FOOD_STEP_SATIETI)
 
       print(f'{self.name} стащил еду.')
@@ -53,7 +53,7 @@ class Cat:
         cat_config.MIN_SATIETI,
         self.satieti - cat_config.STEAL_FOOD_STEP_SATIETI_UNLUCK)
 
-    print(f'{self.name} попытался стащить еду, но потелпел неудачу.')
+      print(f'{self.name} попытался стащить еду, но потелпел неудачу.')
 
   def sleep(self):
     self.satieti = max(cat_config.MIN_SATIETI,
@@ -88,10 +88,8 @@ class Cat:
     if self.satieti <= cat_config.LIVE_MIN_SATIETI:
       if self.owner.home.cat_food >= 20:
         self.eat()
-      else:
-        self.steal_food()
     else:
-      self.action(random.randint(2, 4))
+      self.action(random.randint(2, 5))
 
   def lived_day(self, day):
     if day % 365 == 0:

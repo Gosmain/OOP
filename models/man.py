@@ -18,7 +18,9 @@ class Man:
 
   def __str__(self):
     if self.is_alive():
-      return f'{self.name} - {self.age}\nСчастье - {self.happiness}\nСытость - {self.satieti}\nДеньги - {self.money}\n{self.home.fridge}\nЕда в кормушке - {self.home.cat_food}\n'
+      return f'{self.name} - {self.age}\nСчастье - {self.happiness}\n\
+Сытость - {self.satieti}\nДеньги - {self.money}\n\
+{self.home.fridge}\nЕда в кормушке - {self.home.cat_food}\n'
     else:
       return f'{self.name} умер {self.couse_of_dead()}'
 
@@ -246,7 +248,8 @@ class Wife(Man):
     if self.home.fridge.man_food.value <= 300:
       self.home.fridge.man_food.value += man_config.MAN_FOOD_STEP_MALL
       self.money -= man_config.MAN_FOOD_COST_MALL
-    if self.home.fridge.cat_food.value <= 50:
+    if self.home.fridge.cat_food.value <= 50 and self.money >= man_config.CAT_FOOD_COST_MALL * len(
+      self.remember_living_cats()):
       self.home.fridge.cat_food.value += man_config.CAT_FOOD_STEP_MALL * len(
       self.remember_living_cats())
       self.money -= man_config.CAT_FOOD_COST_MALL * len(
