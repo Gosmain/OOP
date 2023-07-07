@@ -11,9 +11,9 @@ class Man:
     self.name = name
     self.age = age
     self.satieti = man_config.START_SATIETI
-    self.home = None
     self.money = man_config.START_MONEY
     self.happiness = man_config.START_HAPPINES
+    self.home = None
     self.cat = None
     self.spouse = None
 
@@ -35,6 +35,8 @@ class Man:
 
   def wedding(self, who):
     self + who
+    
+    print(f'{self.name} и {who.name} теперь муж и жена.')
 
   def is_married(self):
     return self.spouse != None
@@ -45,6 +47,7 @@ class Man:
     self.happiness = min(man_config.MAX_HAPPINES,
                          self.happiness + man_config.HAPPINES_STEP_EAT)
     self.home.fridge.man_food.value -= man_config.FOOD_STEP_EAT
+    
     print(f'{self.name} поел.\n')
 
   def sleep(self):
@@ -52,6 +55,7 @@ class Man:
                          self.happiness + man_config.HAPPINES_STEP_SLEEP)
     self.satieti = max(man_config.MIN_SATIETI,
                        self.satieti - man_config.SATIETI_STEP_SLEEP)
+    
     print(f'{self.name} поспал.\n')
 
   def go_to_work(self):
@@ -60,6 +64,7 @@ class Man:
       self.spouse.money = self.money
     self.happiness = max(man_config.MIN_HAPPINES,
                          self.happiness - man_config.HAPPINES_STEP_WORK)
+    
     print(f'{self.name} сходил на работу.\n')
 
   def play_computer_games(self):
@@ -67,21 +72,24 @@ class Man:
                          self.happiness + man_config.HAPPINES_STEP_PLAY)
     self.satieti = max(man_config.MIN_SATIETI,
                        self.satieti - man_config.SATIETI_STEP_PLAY)
+    
     print(f'{self.name} поиграл в компьютерные игры.\n')
 
-  def go_to_store(self):
+  def go_to_store(self):        
     self.home.fridge.cat_food.value += man_config.CAT_FOOD_STEP_STORE * len(
-      self.remember_living_cats())
-    self.home.fridge.man_food.value += man_config.MAN_FOOD_STEP_STORE
+      self.remember_living_cats())    
+    self.home.fridge.man_food.value += man_config.MAN_FOOD_STEP_STORE    
+    self.money -= man_config.MAN_FOOD_COST + man_config.CAT_FOOD_COST * len(
+      self.remember_living_cats())    
     self.satieti = max(man_config.MIN_SATIETI,
                        self.satieti - man_config.SATIETI_STEP_STORE)
     self.happiness = max(man_config.MIN_HAPPINES,
                          self.happiness - man_config.HAPPINES_STEP_STORE)
-    self.money -= man_config.MAN_FOOD_COST + man_config.CAT_FOOD_COST * len(
-      self.remember_living_cats())
     if self.is_married():
       self.spouse.money = self.money
+      
     print(f'{self.name} сходил в магазин.\n')
+    
 
   def action(self, selected_action):
     action_dict = {
@@ -101,17 +109,14 @@ class Man:
     else:
       return 'от грусти. R.I.P.'
 
-  # def lived_day(self, day):
-  #   if day % 365 == 0:
-  #     self.age += man_config.GROW_STEP
-  #     self.happiness = min(man_config.MAX_HAPPINES,
-  #                          self.happiness + man_config.HAPPINES_STEP_GROW_UP)
+  def lived_day(self, day):
+    if day % 365 == 0:
+      self.age += man_config.GROW_STEP
+      self.happiness = min(man_config.MAX_HAPPINES,
+                           self.happiness + man_config.HAPPINES_STEP_GROW_UP)
 
-  def choose_cat_name(self):
-    return Faker('ru_RU').first_name()
-
-  def buy_cat(self, name):
-    self.cat = PetShop.sell()(name)
+  def buy_cat(self):
+    self.cat = PetShop.sell()
     self.cat.owner = self
     self.home.add_tenant(self.cat)
     self.home.fridge.cat_food.value += man_config.CAT_FOOD_STEP_STORE
@@ -121,6 +126,7 @@ class Man:
     self.money -= man_config.CAT_COST
     if self.is_married():
       self.spouse.money = self.money
+      
     print(f'{self.name} купил кота.')
 
   def take_cat(self, cat):
@@ -154,6 +160,7 @@ class Man:
       self.remember_living_cats())
     self.home.fridge.cat_food.value -= man_config.FOOD_STEP_FEED_CAT * len(
       self.remember_living_cats())
+    
     print(f'{self.name} наполнил кошачью миску.\n')
 
   def move_to_new_house(self, house):
@@ -188,7 +195,7 @@ class Man:
         self.remember_living_cats()):
       self.go_to_work()
 
-    elif self.home.fridge.man_food.value + self.home.fridge.cat_food.value <= man_config.FRIDGE_CAPACITY:
+    elif self.money >= man_config.LIVE_MIN_MONEY and self.home.fridge.free_place() >= 200:
       self.go_to_store()
 
     elif self.home.cat_food <= man_config.LIVE_MIN_HOME_CAT_FOOD * len(
@@ -201,11 +208,11 @@ class Man:
       else:
         self.fill_cat_bowl()
 
-    elif self.money >= man_config.MONEY_FOR_BUY_CAT:
-      self.buy_cat(self.choose_cat_name())
+    elif self.money >= man_config.MONEY_FOR_BUY_CAT and len(self.remember_living_cats()) < 2:
+      self.buy_cat()
 
     else:
-      self.action(random.randint(1, 4))
+      self.action(random.randint(2, 4))
 
     self.bury_cat()
 
@@ -217,9 +224,9 @@ class Man:
     self.money -= how_many
     self.spouse.money -= how_many
 
-  def live_circle(self):
+  def live_circle(self, day):
     if self.is_alive():
-      # self.lived_day(day)
+      self.lived_day(day)
       self.live()
 
 
@@ -236,6 +243,20 @@ class Wife(Man):
       4: self.go_to_store
     }
     return action_dict[selected_action]()
+
+  def go_to_mall(self):
+    if self.home.fridge.man_food.value <= 300:
+      self.home.fridge.man_food.value += man_config.MAN_FOOD_STEP_MALL
+      self.money -= man_config.MAN_FOOD_COST_MALL
+    if self.home.fridge.cat_food.value <= 50:
+      self.home.fridge.cat_food.value += man_config.CAT_FOOD_STEP_MALL * len(
+      self.remember_living_cats())
+      self.money -= man_config.CAT_FOOD_COST_MALL * len(
+      self.remember_living_cats())
+    if self.is_married():
+      self.spouse.money = self.money
+      
+    print(f'{self.name} съездил в молл.\n')
     
 
   def live(self):
@@ -246,17 +267,20 @@ class Wife(Man):
     elif self.satieti <= man_config.LIVE_MIN_SATIETI and self.home.fridge.man_food.value >= 20:
       self.eat()
 
-    elif self.money >= man_config.LIVE_MIN_MONEY and self.home.fridge.man_food.value + self.home.fridge.cat_food.value <= man_config.FRIDGE_CAPACITY:
-          self.go_to_store()
+    elif self.money >= man_config.LIVE_MIN_MONEY and self.home.fridge.free_place() >= 200:
+      if self.money >= man_config.LIVE_MIN_MONEY_MALL and self.home.fridge.free_place() >= 400:
+        self.go_to_mall()
+      else:
+        self.go_to_store()
 
     elif len(self.remember_living_cats()) > 0 and self.home.fridge.cat_food.value >= 20 * len(self.remember_living_cats()) and self.home.cat_food < man_config.LIVE_MIN_HOME_CAT_FOOD*len(self.remember_living_cats()):
       self.fill_cat_bowl()      
 
-    elif self.money >= man_config.MONEY_FOR_BUY_CAT:
-      self.buy_cat(self.choose_cat_name())
+    elif self.money >= man_config.MONEY_FOR_BUY_CAT and len(self.remember_living_cats()) < 2:
+      self.buy_cat()
 
     else:
-      self.action(random.randint(1, 3))
+      self.action(random.randint(2, 3))
 
     self.bury_cat()
 

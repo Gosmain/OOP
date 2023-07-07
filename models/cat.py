@@ -7,8 +7,8 @@ class Cat:
   def __init__(self, name):
     self.name = name
     self.age = 0
-    self.owner = None
     self.satieti = cat_config.START_SATIETI
+    self.owner = None
     self.breed = None
     self.home = None
 
@@ -34,34 +34,43 @@ class Cat:
     else:
       self.satieti = max(cat_config.MIN_SATIETI,
                          self.satieti - cat_config.STEP_HUNGER)
+      
       print(f'{self.name} голодает.')
 
+  def steal_chance(self):
+    return random.randint(1, 10) <= cat_config.STEAL_CHANCE
+
   def steal_food(self):
-    if random.randint(1, 10) <= cat_config.STEAL_CHANCE:
+    if self.steal_chance():
       self.owner.home.fridge.man_food.value -= cat_config.STEAL_FOOD_STEP_FOOD
       self.satieti += min(cat_config.MAX_SATIETI,
                           self.satieti + cat_config.STEAL_FOOD_STEP_SATIETI)
+      
       print(f'{self.name} стащил еду.')
     else:
-      print(f'{self.name} попытался стащить еду, но потелпел неудачу.')
       self.satieti = max(
         cat_config.MIN_SATIETI,
         self.satieti - cat_config.STEAL_FOOD_STEP_SATIETI_UNLUCK)
 
+    print(f'{self.name} попытался стащить еду, но потелпел неудачу.')
+
   def sleep(self):
     self.satieti = max(cat_config.MIN_SATIETI,
                        self.satieti - cat_config.SLEEP_SATIETI_STEP)
+    
     print(f'{self.name} поспал.')
 
   def walk(self):
     self.satieti = max(cat_config.MIN_SATIETI,
                        self.satieti - cat_config.WALK_SATIETI_STEP)
+    
     print(f'{self.name} погулял.')
 
   def look_out_window(self):
     self.satieti = max(
       cat_config.MIN_SATIETI,
       self.satieti - cat_config.LOOK_OUT_THE_WINDOW_SATIETI_STEP)
+    
     print(f'{self.name} смотрел в окно.')
 
   def action(self, selected_action):
@@ -83,12 +92,13 @@ class Cat:
     else:
       self.action(random.randint(2, 4))
 
-  # def lived_day(self, day):
-  #   if day % 365 == 0:
-  #     self.age += cat_config.GROW_STEP
+  def lived_day(self, day):
+    if day % 365 == 0:
+      self.age += cat_config.GROW_STEP
 
-  def live_circle(self):
+  def live_circle(self, day):
     if self.is_alive():
+      self.lived_day(day)
       self.live()
       
 

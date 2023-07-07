@@ -17,4 +17,4 @@ class Time:
 
   def notify(self):
     for obs in self.observers:
-     obs.live_circle()
+     obs.live_circle(self.time//24)
