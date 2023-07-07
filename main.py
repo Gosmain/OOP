@@ -20,7 +20,7 @@ if __name__ == "__main__":
 
   while character.is_alive():
     
-    time.sleep(0)
+    time.sleep(0.5)
 
     global_time.observers = sorted([character, women] +
                             character.remember_living_cats(),
