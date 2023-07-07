@@ -6,6 +6,7 @@ from models.time_obs import Time
 
 if __name__ == "__main__":
 
+
   character = Man(Faker('ru_RU').first_name_male(), 30)
   women = Wife(Faker('ru_RU').first_name_female(), 29)
   character_home = Home()

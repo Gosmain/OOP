@@ -34,7 +34,7 @@ class Cat:
     else:
       self.satieti = max(cat_config.MIN_SATIETI,
                          self.satieti - cat_config.STEP_HUNGER)
-      
+
       print(f'{self.name} голодает.')
 
   def steal_chance(self):
@@ -45,8 +45,9 @@ class Cat:
       self.owner.home.fridge.man_food.value -= cat_config.STEAL_FOOD_STEP_FOOD
       self.satieti += min(cat_config.MAX_SATIETI,
                           self.satieti + cat_config.STEAL_FOOD_STEP_SATIETI)
-      
+
       print(f'{self.name} стащил еду.')
+
     else:
       self.satieti = max(
         cat_config.MIN_SATIETI,
@@ -57,20 +58,20 @@ class Cat:
   def sleep(self):
     self.satieti = max(cat_config.MIN_SATIETI,
                        self.satieti - cat_config.SLEEP_SATIETI_STEP)
-    
+
     print(f'{self.name} поспал.')
 
   def walk(self):
     self.satieti = max(cat_config.MIN_SATIETI,
                        self.satieti - cat_config.WALK_SATIETI_STEP)
-    
+
     print(f'{self.name} погулял.')
 
   def look_out_window(self):
     self.satieti = max(
       cat_config.MIN_SATIETI,
       self.satieti - cat_config.LOOK_OUT_THE_WINDOW_SATIETI_STEP)
-    
+
     print(f'{self.name} смотрел в окно.')
 
   def action(self, selected_action):
@@ -100,14 +101,13 @@ class Cat:
     if self.is_alive():
       self.lived_day(day)
       self.live()
-      
 
 
 class RussianBlueCat(Cat):
 
   def __init__(
-          self,
-          name,
+    self,
+    name,
   ):
     super().__init__(name)
     self.breed = 'русская голубая'
@@ -116,8 +116,8 @@ class RussianBlueCat(Cat):
 class ScotishCat(Cat):
 
   def __init__(
-          self,
-          name,
+    self,
+    name,
   ):
     super().__init__(name)
     self.breed = 'шотландская'
@@ -126,8 +126,8 @@ class ScotishCat(Cat):
 class SphinxCat(Cat):
 
   def __init__(
-          self,
-          name,
+    self,
+    name,
   ):
     super().__init__(name)
     self.breed = 'сфинкс'

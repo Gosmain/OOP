@@ -1,5 +1,4 @@
 import random
-from faker import Faker
 
 from configs import man_config
 from models.pet_shop import PetShop
@@ -15,7 +14,7 @@ class Man:
     self.happiness = man_config.START_HAPPINES
     self.home = None
     self.cat = None
-    self.spouse = None
+    self.spouse = None 
 
   def __str__(self):
     if self.is_alive():
@@ -27,8 +26,7 @@ class Man:
     self.home.add_tenant(other)
     self.spouse = other
     other.spouse = self
-    self.up_top_overall(other.money)
-    
+    self.up_top_overall(other.money)    
 
   def is_alive(self):
     return self.satieti > 0 and self.happiness > 0
@@ -260,7 +258,7 @@ class Wife(Man):
     
 
   def live(self):
-    
+
     if self.happiness <= man_config.LIVE_MIN_HAPPINES:
       self.play_computer_games()
 
@@ -274,7 +272,7 @@ class Wife(Man):
         self.go_to_store()
 
     elif len(self.remember_living_cats()) > 0 and self.home.fridge.cat_food.value >= 20 * len(self.remember_living_cats()) and self.home.cat_food < man_config.LIVE_MIN_HOME_CAT_FOOD*len(self.remember_living_cats()):
-      self.fill_cat_bowl()      
+      self.fill_cat_bowl()
 
     elif self.money >= man_config.MONEY_FOR_BUY_CAT and len(self.remember_living_cats()) < 2:
       self.buy_cat()
@@ -284,5 +282,4 @@ class Wife(Man):
 
     self.bury_cat()
 
-    
-    
+

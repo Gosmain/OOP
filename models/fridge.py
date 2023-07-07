@@ -12,3 +12,4 @@ class Fridge(object):
 
   def free_place(self):
     return fridge_config.FRIDGE_CAPACITY - self.man_food.value
+
