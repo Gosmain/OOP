@@ -37,7 +37,9 @@ class Cat:
 
       print(f'{self.name} голодает.')
 
-  def steal_chance(self):
+  def steal_chance(self): # TODO небольшое замечание к неймингу, функции принято назвать глаголами, то есть это
+    # TODO какое-то действие, добавь например get_ в начало названия, или is_steal() или check_steal_chance()
+    # TODO функции - глагол, классы и переменные - существительные
     return random.randint(1, 10) <= cat_config.STEAL_CHANCE
 
   def steal_food(self):

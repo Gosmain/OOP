@@ -18,9 +18,11 @@ class Man:
 
   def __str__(self):
     if self.is_alive():
-      return f'{self.name} - {self.age}\nСчастье - {self.happiness}\n\
-Сытость - {self.satieti}\nДеньги - {self.money}\n\
-{self.home.fridge}\nЕда в кормушке - {self.home.cat_food}\n'
+      return (
+        f'{self.name} - {self.age}\nСчастье - {self.happiness}\n'
+        f'Сытость - {self.satieti}\nДеньги - {self.money}\n'
+        f'{self.home.fridge}\nЕда в кормушке - {self.home.cat_food}\n'
+      ) # TODO поправил строки, примерно так обычно их пишут, если получилась длинная строка
 
     else:
       return f'{self.name} умер {self.couse_of_dead()}'
@@ -34,7 +36,7 @@ class Man:
   def is_alive(self):
     return self.satieti > 0 and self.happiness > 0
 
-  def wedding(self, who):
+  def wedding(self, who): # TODO тоже переименуй в глагол
     self + who
 
     print(f'{self.name} и {who.name} теперь муж и жена.')
@@ -135,6 +137,11 @@ class Man:
     self.remember_living_cats().append(cat)
 
   def remember_living_cats(self, cat_list=[]):
+    # TODO неудачное название, напомню, что типы данных мы в названии переменных не используем
+    #  (на самом деле используем, но супер редко)
+    #  Кажется это неудачне решение, список будет храниться внутри функции
+    #  Вообще не рекомендую значение по умолчанию использовать пустой список или словарь, можешь себе в ногу выстрелить,
+    #  подумай как можно изменить
     return cat_list
 
   def remember_dead_cats(self, cat_list=[]):

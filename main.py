@@ -20,21 +20,23 @@ if __name__ == "__main__":
 
   while character.is_alive():
     
-    time.sleep(0.5)
+    time.sleep(0.5) # TODO перед первым проходом будем задержка, лучше убери в конец итерации
 
     global_time.observers = sorted([character, women] +
                             character.remember_living_cats(),
                             key=lambda x: type(x) == type(character),
-                            reverse=True)
+                            reverse=True) # TODO оставил комментарий внутри Тайм()
 
     if not (character.is_alive() and women.is_alive()):
       break
 
     else:
-      global_time.change_time(1)
+      global_time.change_time(1) # TODO а тут разве кроме 1 что-то будет? Подумай как изменить метод, можно обойтись
+      # TODO без аргументов
 
       print(f'\nДень {global_time.time//24}\n')
-      for liver in global_time.observers:
+      for liver in global_time.observers: # TODO давай всех существ будем держать на этом уровне в списке/словарике, без
+        # TODO обращения к Тайму()
         print(f'{liver}\n')
 
       character.home.fridge.man_food.spoil()

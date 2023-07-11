@@ -11,7 +11,7 @@ class Food(object):
   def __str__(self):
     return f'Количество еды {self.value}.'
 
-  def chance_spoil(self):
+  def chance_spoil(self): # TODO то же самое с неймингом что и в котах
     return random.randint(1, 10) <= food_config.SPOIL_FOOD_CHANCE
 
   def spoil(self):
