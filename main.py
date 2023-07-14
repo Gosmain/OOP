@@ -9,7 +9,6 @@ if __name__ == "__main__":
 
   living_beings = []
 
-
   character = Man(Faker('ru_RU').first_name_male(), 30)
   women = Wife(Faker('ru_RU').first_name_female(), 29)
   character_home = Home()
@@ -22,12 +21,7 @@ if __name__ == "__main__":
 
   livers = [character, women]
 
-
-<<<<<<< HEAD
-  for i in range(3650):
-=======
   while True:
->>>>>>> main
 
     for cat in character.cats['живые']:
       if cat not in livers:
@@ -53,12 +47,8 @@ if __name__ == "__main__":
       character.home.fridge.cat_food.spoil()
 
     time.sleep(0)
-  
+
   print(
     f"Симуляция закончена. У {character.name} {character.money} денег, {character.happiness} счастья. "
-    f"Жена {women.name}, счастье {women.happiness}. {len(character.cats['живые'])} котиков. " 
-    f"\nКотиков умерло: {len(character.cats['мертвые'])}."
-  )
-
-
-
+    f"Жена {women.name}, счастье {women.happiness}. {len(character.cats['живые'])} котиков. "
+    f"\nКотиков умерло: {len(character.cats['мертвые'])}.")
