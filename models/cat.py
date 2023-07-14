@@ -33,7 +33,6 @@ class Cat:
     else:
       self.steal_food()
 
-
   def get_steal_chance(self):
     return random.randint(1, 10) <= cat_config.STEAL_CHANCE
 

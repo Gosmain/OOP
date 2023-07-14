@@ -11,7 +11,6 @@ class Food(object):
   def __str__(self):
     return f'Количество еды {self.value}.'
 
-
   def get_chance_spoil(self):
     return random.randint(1, 10) <= food_config.SPOIL_FOOD_CHANCE
 
