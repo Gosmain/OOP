@@ -1,15 +1,18 @@
 class Time:
 
     def __init__(self, time):
-        self.time = time
-        self.observers = []
+      self.time = time
+      self.observers = []
 
-    def change_time(self, time):
-        self.time += time
-        self.notify()
+    def change_time(self):
+      self.time += 1
+      self.notify()
 
     def add_observer(self, who):
-        self.observers.append(who)
+      self.observers.append(who)
+
+    def remove_observer(self, who):
+      self.observers.remove(who)
 
 
 

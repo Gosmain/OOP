@@ -16,7 +16,6 @@ class Cat:
     if self.is_alive():
       return f'{self.name}. Сытость - {self.satieti}. Порода - {self.breed}.\n'
     else:
-      self.owner.cat = None
       return f'{self.name} умер от голода.\n'
 
   def is_alive(self):
@@ -27,22 +26,19 @@ class Cat:
 
   def eat(self):
     if self.home.cat_food >= cat_config.MIN_EAT_HOME_CAT_FOOD:
-      self.owner.home.cat_food -= cat_config.STEP_EAT_FOOD
+      self.home.cat_food -= cat_config.STEP_EAT_FOOD
       self.satieti = min(cat_config.MAX_SATIETI,
                          self.satieti + cat_config.EAT_SATIETI_STEP)
       print(f'{self.name} поел.')
     else:
-      self.satieti = max(cat_config.MIN_SATIETI,
-                         self.satieti - cat_config.STEP_HUNGER)
+      self.steal_food()
 
-      print(f'{self.name} голодает.')
-
-  def steal_chance(self):
+  def get_steal_chance(self):
     return random.randint(1, 10) <= cat_config.STEAL_CHANCE
 
   def steal_food(self):
-    if self.steal_chance():
-      self.owner.home.fridge.man_food.value -= cat_config.STEAL_FOOD_STEP_FOOD
+    if self.get_steal_chance():
+      self.home.fridge.man_food.value -= cat_config.STEAL_FOOD_STEP_FOOD
       self.satieti = min(cat_config.MAX_SATIETI,
                           self.satieti + cat_config.STEAL_FOOD_STEP_SATIETI)
 
@@ -86,8 +82,7 @@ class Cat:
 
   def live(self):
     if self.satieti <= cat_config.LIVE_MIN_SATIETI:
-      if self.owner.home.cat_food >= 20:
-        self.eat()
+      self.eat()
     else:
       self.action(random.randint(2, 5))
 
