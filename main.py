@@ -56,3 +56,5 @@ if __name__ == "__main__":
     f"\nКотиков умерло: {len(character.cats['мертвые'])}."
   )
 
+
+
