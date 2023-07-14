@@ -23,7 +23,11 @@ if __name__ == "__main__":
   livers = [character, women]
 
 
+<<<<<<< HEAD
   for i in range(3650):
+=======
+  while True:
+>>>>>>> main
 
     for cat in character.cats['живые']:
       if cat not in livers:
