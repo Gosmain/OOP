@@ -9,7 +9,10 @@ class Home:
     self.owner = None
     self.fridge = Fridge()
     self.cat_food = home_config.START_CAT_FOOD
-    self.tenants = {'люди': [], 'коты': []}
+    self.tenants = {
+      'люди': [],
+      'коты': []
+    }
 
   def add_tenant(self, who):
     if isinstance(who, Man):

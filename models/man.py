@@ -12,8 +12,11 @@ class Man:
     self.satieti = man_config.START_SATIETI
     self.money = man_config.START_MONEY
     self.happiness = man_config.START_HAPPINES
+    self.cats = {
+      'живые': [],
+      'мертвые': []
+    }
     self.home = None
-    self.cat = None
     self.spouse = None
 
   def __str__(self):
@@ -22,8 +25,7 @@ class Man:
         f'{self.name} - {self.age}\nСчастье - {self.happiness}\n'
         f'Сытость - {self.satieti}\nДеньги - {self.money}\n'
         f'{self.home.fridge}\nЕда в кормушке - {self.home.cat_food}\n'
-      ) # TODO поправил строки, примерно так обычно их пишут, если получилась длинная строка
-
+      )
     else:
       return f'{self.name} умер {self.couse_of_dead()}'
 
@@ -36,7 +38,7 @@ class Man:
   def is_alive(self):
     return self.satieti > 0 and self.happiness > 0
 
-  def wedding(self, who): # TODO тоже переименуй в глагол
+  def get_married(self, who):
     self + who
 
     print(f'{self.name} и {who.name} теперь муж и жена.')
@@ -79,15 +81,21 @@ class Man:
     print(f'{self.name} поиграл в компьютерные игры.\n')
 
   def go_to_store(self):
-    self.home.fridge.cat_food.value += man_config.CAT_FOOD_STEP_STORE * len(
-      self.remember_living_cats())
-    self.home.fridge.man_food.value += man_config.MAN_FOOD_STEP_STORE
-    self.money -= man_config.MAN_FOOD_COST + man_config.CAT_FOOD_COST * len(
-      self.remember_living_cats())
+    
+    products_in_the_cart = min(self.money, self.home.fridge.get_free_place_man_food())
+    self.home.fridge.man_food.value += products_in_the_cart
+    self.money -= products_in_the_cart
+
+    if len(self.cats['живые'])>0:
+      cat_products_in_the_cart = min(self.money, self.home.fridge.get_free_place_cat_food())
+      self.home.fridge.cat_food.value += cat_products_in_the_cart
+      self.money -= cat_products_in_the_cart
+    
     self.satieti = max(man_config.MIN_SATIETI,
                        self.satieti - man_config.SATIETI_STEP_STORE)
     self.happiness = max(man_config.MIN_HAPPINES,
                          self.happiness - man_config.HAPPINES_STEP_STORE)
+    
     if self.is_married():
       self.spouse.money = self.money
 
@@ -118,11 +126,10 @@ class Man:
                            self.happiness + man_config.HAPPINES_STEP_GROW_UP)
 
   def buy_cat(self):
-    self.cat = PetShop.sell()
-    self.cat.owner = self
-    self.home.add_tenant(self.cat)
-    self.home.fridge.cat_food.value += man_config.CAT_FOOD_STEP_STORE
-    self.remember_living_cats().append(self.cat)
+    self.cats['живые'].append(PetShop.sell())
+    self.cats['живые'][-1].owner = self
+    self.home.add_tenant(self.cats['живые'][-1])
+    self.home.fridge.cat_food.value += man_config.CAT_FOOD_STEP
     self.happiness = min(man_config.MAX_HAPPINES,
                          self.happiness + man_config.HAPPINES_STEP_BUY_CAT)
     self.money -= man_config.CAT_COST
@@ -132,27 +139,17 @@ class Man:
     print(f'{self.name} купил кота.')
 
   def take_cat(self, cat):
-    self.cat = cat
-    self.home = cat.home
-    self.remember_living_cats().append(cat)
-
-  def remember_living_cats(self, cat_list=[]):
-    # TODO неудачное название, напомню, что типы данных мы в названии переменных не используем
-    #  (на самом деле используем, но супер редко)
-    #  Кажется это неудачне решение, список будет храниться внутри функции
-    #  Вообще не рекомендую значение по умолчанию использовать пустой список или словарь, можешь себе в ногу выстрелить,
-    #  подумай как можно изменить
-    return cat_list
-
-  def remember_dead_cats(self, cat_list=[]):
-    return cat_list
-
+    self.cats['живые'].append(cat)
+    self.home.add_tenant(cat)
+    if self.is_married():
+      self.spouse.cats['живые'].append(cat)
+    
   def bury_cat(self):
-    for cat in self.remember_living_cats():
+    for cat in self.cats['живые']:
       if not cat.is_alive():
-        item = self.remember_living_cats().pop(
-          self.remember_living_cats().index(cat))
-        self.remember_dead_cats().append(item)
+        item = self.cats['живые'].pop(
+          self.cats['живые'].index(cat))
+        self.cats['мертвые'].append(item)
         self.happiness = max(
           man_config.MIN_HAPPINES,
           self.happiness - man_config.HAPPINES_STEP_BURY_CAT)
@@ -163,17 +160,17 @@ class Man:
                          self.happiness + man_config.HAPPINES_STEP_FEED_CAT)
     self.satieti = max(man_config.MIN_SATIETI,
                        self.satieti - man_config.SATIETI_STEP_FEED_CAT)
-    self.home.cat_food += man_config.FOOD_STEP_FEED_CAT * len(
-      self.remember_living_cats())
-    self.home.fridge.cat_food.value -= man_config.FOOD_STEP_FEED_CAT * len(
-      self.remember_living_cats())
+    self.home.cat_food += min(self.home.fridge.cat_food.value, man_config.FOOD_STEP_FEED_CAT*len(
+      self.cats['живые']))
+    self.home.fridge.cat_food.value -= min(self.home.fridge.cat_food.value, man_config.FOOD_STEP_FEED_CAT * len(
+      self.cats['живые']))
 
     print(f'{self.name} наполнил кошачью миску.\n')
 
   def move_to_new_house(self, house):
     self.home = house
     self.home.tenants['люди'].append(self)
-    for cat in self.remember_living_cats():
+    for cat in self.cats['живые']:
       cat.home = self.home
       self.home.tenants['коты'].append(cat)
     self.home.change_owner(self)
@@ -181,7 +178,7 @@ class Man:
   def remove_home(self):
     self.home = None
     self.home.tenants['люди'].remove(self)
-    for cat in self.remember_living_cats():
+    for cat in self.cats['живые']:
       cat.home = self.home
       self.home.tenants['коты'].remove(cat)
 
@@ -199,25 +196,24 @@ class Man:
           self.go_to_work()
 
     elif self.money <= man_config.LIVE_MIN_MONEY + man_config.LIVE_MIN_MONEY_CAT * len(
-        self.remember_living_cats()):
+        self.cats['живые']):
       self.go_to_work()
 
-    elif self.money >= man_config.LIVE_MIN_MONEY and self.home.fridge.free_place(
+    elif self.money >= man_config.LIVE_MIN_MONEY and self.home.fridge.get_free_place_man_food(
     ) >= 200:
       self.go_to_store()
 
     elif self.home.cat_food <= man_config.LIVE_MIN_HOME_CAT_FOOD * len(
-        self.remember_living_cats()) and len(self.remember_living_cats(
-        )) > 0 and self.home.fridge.cat_food.value > len(
-          self.remember_living_cats()) * 20:
+        self.cats['живые']) and len(self.cats['живые']) > 0 and self.home.fridge.cat_food.value > len(
+          self.cats['живые']) * 20:
       if self.home.fridge.cat_food.value < 20 * len(
-          self.remember_living_cats()):
+          self.cats['живые']):
         self.go_to_store()
       else:
         self.fill_cat_bowl()
 
     elif self.money >= man_config.MONEY_FOR_BUY_CAT and len(
-        self.remember_living_cats()) < 2:
+        self.cats['живые']) < 1:
       self.buy_cat()
 
     else:
@@ -279,21 +275,6 @@ class Wife(Man):
     }
     return action_dict[selected_action]()
 
-  def go_to_mall(self):
-    if self.home.fridge.man_food.value <= 300:
-      self.home.fridge.man_food.value += man_config.MAN_FOOD_STEP_MALL
-      self.money -= man_config.MAN_FOOD_COST_MALL
-    if self.home.fridge.cat_food.value <= 50 and self.money >= man_config.CAT_FOOD_COST_MALL * len(
-        self.remember_living_cats()):
-      self.home.fridge.cat_food.value += man_config.CAT_FOOD_STEP_MALL * len(
-        self.remember_living_cats())
-      self.money -= man_config.CAT_FOOD_COST_MALL * len(
-        self.remember_living_cats())
-    if self.is_married():
-      self.spouse.money = self.money
-
-    print(f'{self.name} съездил в молл.\n')
-
   def live(self):
 
     if self.happiness <= man_config.LIVE_MIN_HAPPINES:
@@ -302,23 +283,16 @@ class Wife(Man):
     elif self.satieti <= man_config.LIVE_MIN_SATIETI and self.home.fridge.man_food.value >= 20:
       self.eat()
 
-    elif self.money >= man_config.LIVE_MIN_MONEY and self.home.fridge.free_place(
-    ) >= 200:
-      if self.money >= man_config.LIVE_MIN_MONEY_MALL and self.home.fridge.free_place(
-      ) >= 400:
-        self.go_to_mall()
-      else:
-        self.go_to_store()
+    elif min(self.home.fridge.get_free_place_man_food(), self.home.fridge.get_free_place_man_food()) >= 300:
+      self.go_to_store()
 
-    elif len(self.remember_living_cats(
-    )) > 0 and self.home.fridge.cat_food.value >= 20 * len(
-        self.remember_living_cats(
-        )) and self.home.cat_food < man_config.LIVE_MIN_HOME_CAT_FOOD * len(
-          self.remember_living_cats()):
+    elif len(self.cats['живые']) > 0 and self.home.fridge.cat_food.value >= 20 * len(
+        self.cats['живые']) and self.home.cat_food < man_config.LIVE_MIN_HOME_CAT_FOOD * len(
+          self.cats['живые']):
       self.fill_cat_bowl()
 
     elif self.money >= man_config.MONEY_FOR_BUY_CAT and len(
-        self.remember_living_cats()) < 2:
+        self.cats['живые']) < 1:
       self.buy_cat()
 
     else:
